@@ -1,7 +1,8 @@
 import discord
-from discord.ext import commands
 import re
+from discord.ext import commands
 import random
+import asyncio
 
 # Define the intents your bot will use
 intents = discord.Intents.default()
@@ -10,14 +11,24 @@ intents.message_content = True  # Allows reading message content
 # Initialize the bot with the specified intents
 bot = commands.Bot(command_prefix='!', intents=intents)
 
+
+# buy_pattern = re.compile(r'(how to|where to)(buy|purchase|)Ultimate blockRegen plugin', re.IGNORECASE)
 # Define a regular expression pattern to match phrases related to plugin wikis
+buy_pattern = re.compile(r'(how (can|do) I |where (can|do) I (buy|purchase) )Ultimate( |-)?BlockRegen( plugin)?', re.IGNORECASE)
+
+
 plugin_wiki_pattern = re.compile(r'(is there a|where can I find a) wiki (for|about) (.+) plugin', re.IGNORECASE)
-# ticket_pattern = re.compile(r'(how to make a|how will i make a|how can i make a|where can i|how to open a) ticket ',
-#                            re.IGNORECASE)
 ticket_pattern = re.compile(r'(how to (make|create|open) a|how (can|do) I (make|create|open) a|where can I|how (can|do)'
                             r' I) ticket', re.IGNORECASE)
 greeting_pattern = re.compile(r'^(hi|hello|hey|how\'?s? (it|everything) go(ing)?|what\'?s? up|sup|yo)\s*\??$',
                               re.IGNORECASE)
+
+buy_responses = [
+    f'You can purchase the Ultimate Blockregen plugin by heading over to the <#{1126207483841618066}>.',
+    f'You can buy the Ultimate Blockregen plugin by heading over to the <#{1126207483841618066}>.',
+    f'You can purchase the Ultimate Blockregen plugin by going to the <#{1126207483841618066}>.',
+    f'You can buy the Ultimate Blockregen plugin by going to the <#{1126207483841618066}>.'
+]
 
 
 greeting_responses = [
@@ -28,6 +39,8 @@ greeting_responses = [
     "Hello! How can I assist you today?",
     "Hi! What can I do for you?",
 ]
+
+
 
 # Event handler for when the bot is ready
 @bot.event
@@ -62,8 +75,15 @@ async def on_message(message):
     match_3 = greeting_pattern.search(message.content)
     if match_3:
         # Select a random response from the list and send it
-        response = random.choice(greeting_responses)
-        await message.channel.send(response)
+        response_3 = random.choice(greeting_responses)
+        await message.channel.send(response_3)
+
+    match_4 = buy_pattern.search(message.content)
+    if match_4:
+        print("working")
+        # Respond to the user's intent to buy the plugin
+        response_4 = random.choice(buy_responses)
+        await message.channel.send(response_4)
 
 @bot.command()
 @commands.has_any_role('Prime', 'Owner')  # Only users with 'prime' or 'owner' role can use this command
@@ -123,4 +143,4 @@ async def unban(ctx, user_id: int):
 
 
 # Run the bot with your token
-bot.run('Your token here')
+bot.run('Bottoken')
